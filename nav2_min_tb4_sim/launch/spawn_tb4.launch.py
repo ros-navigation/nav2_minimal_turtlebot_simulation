@@ -30,6 +30,7 @@ def generate_launch_description():
     sim_dir = get_package_share_directory('nav2_min_tb4_sim')
     desc_dir = get_package_share_directory('nav2_min_tb4_description')
 
+    use_sim_time = LaunchConfiguration('use_sim_time')
     namespace = LaunchConfiguration('namespace')
     use_simulator = LaunchConfiguration('use_simulator')
     robot_name = LaunchConfiguration('robot_name')
@@ -52,6 +53,12 @@ def generate_launch_description():
         default_value='True',
         description='Whether to start the simulator')
 
+    declare_use_sim_time_cmd = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='true',
+        description='Use simulation (Gazebo) clock if true',
+    )
+
     declare_robot_name_cmd = DeclareLaunchArgument(
         'robot_name',
         default_value='turtlebot4',
@@ -70,6 +77,7 @@ def generate_launch_description():
                 'config_file': os.path.join(
                     sim_dir, 'configs', 'tb4_bridge.yaml'
                 ),
+                'use_sim_time': use_sim_time,
             }
         ],
         output='screen',
@@ -85,13 +93,11 @@ def generate_launch_description():
             '-file', robot_sdf,
             '-robot_namespace', namespace,
             '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
-            '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']]
+            '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']],
+        parameters=[{'use_sim_time': use_sim_time}]
     )
 
-    set_env_vars_resources1 = AppendEnvironmentVariable(
-            'GZ_SIM_RESOURCE_PATH',
-            os.path.join(sim_dir, 'worlds'))
-    set_env_vars_resources2 = AppendEnvironmentVariable(
+    set_env_vars_resources = AppendEnvironmentVariable(
             'GZ_SIM_RESOURCE_PATH',
             os.path.join(desc_dir))
 
@@ -101,9 +107,9 @@ def generate_launch_description():
     ld.add_action(declare_robot_name_cmd)
     ld.add_action(declare_robot_sdf_cmd)
     ld.add_action(declare_use_simulator_cmd)
+    ld.add_action(declare_use_sim_time_cmd)
 
-    ld.add_action(set_env_vars_resources1)
-    ld.add_action(set_env_vars_resources2)
+    ld.add_action(set_env_vars_resources)
 
     ld.add_action(bridge)
     ld.add_action(spawn_model)
