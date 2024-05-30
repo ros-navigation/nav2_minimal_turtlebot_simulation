@@ -57,8 +57,8 @@ def generate_launch_description():
     headless = LaunchConfiguration('headless')
     world = LaunchConfiguration('world')
     pose = {
-        'x': LaunchConfiguration('x_pose', default='-2.00'),
-        'y': LaunchConfiguration('y_pose', default='-0.50'),
+        'x': LaunchConfiguration('x_pose', default='-8.00'),
+        'y': LaunchConfiguration('y_pose', default='0.00'),
         'z': LaunchConfiguration('z_pose', default='0.01'),
         'R': LaunchConfiguration('roll', default='0.00'),
         'P': LaunchConfiguration('pitch', default='0.00'),
@@ -161,7 +161,6 @@ def generate_launch_description():
         ],
     )
 
-
     # The SDF file for the world is a xacro file because we wanted to
     # conditionally load the SceneBroadcaster plugin based on wheter we're
     # running in headless mode. But currently, the Gazebo command line doesn't
@@ -191,8 +190,7 @@ def generate_launch_description():
                          'launch',
                          'gz_sim.launch.py')
         ),
-        condition=IfCondition(PythonExpression(
-            [use_simulator, ' and not ', headless])),
+        condition=IfCondition(PythonExpression([use_simulator, ' and not ', headless])),
         launch_arguments={'gz_args': ['-v4 -g ']}.items(),
     )
 

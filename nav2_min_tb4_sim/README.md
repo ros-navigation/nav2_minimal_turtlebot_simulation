@@ -5,27 +5,12 @@ This is a minimum simulation for the Turtlebot4 for use with Nav2. This is setup
 Includes the Gazebo bridge configuration and launch files to open the robot in a particular simulated world (provided)
 
 TODO
-- Simulate robot
 - sensors all working in ros
 - Test with nav2
 
 
 WTF
 
-        # RPLIDAR static transforms
-        Node(
-            name='rplidar_stf',
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            output='screen',
-            arguments=[
-                '0', '0', '0', '0', '0', '0.0',
-                'rplidar_link', [robot_name, '/rplidar_link/rplidar']],
-            remappings=[
-                ('/tf', 'tf'),
-                ('/tf_static', 'tf_static'),
-            ]
-        ),
 
         # OAKD static transform
         # Required for pointcloud. See https://github.com/gazebosim/gz-sensors/issues/239
