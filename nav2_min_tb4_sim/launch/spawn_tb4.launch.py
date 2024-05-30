@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import os
-
+from pathlib import Path
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
@@ -22,6 +22,7 @@ from launch.actions import AppendEnvironmentVariable
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
+from launch.substitutions import Command
 
 from launch_ros.actions import Node
 
@@ -66,7 +67,7 @@ def generate_launch_description():
 
     declare_robot_sdf_cmd = DeclareLaunchArgument(
         'robot_sdf',
-        default_value=os.path.join(desc_dir, 'worlds', 'gz_waffle.sdf'), # TODO tb4 + sdf + urdf + xacro?
+        default_value=os.path.join(desc_dir, 'urdf', 'standard', 'turtlebot4.urdf.xacro'),
         description='Full path to robot sdf file to spawn the robot in gazebo')
 
     bridge = Node(
@@ -90,7 +91,8 @@ def generate_launch_description():
         output='screen',
         arguments=[
             '-entity', robot_name,
-            '-file', robot_sdf,
+            '-topic', 'robot_description',
+            # '-file', Command(['xacro', ' ', robot_sdf]), # TODO robot SDF file just unhappy.
             '-robot_namespace', namespace,
             '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
             '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']],
@@ -99,7 +101,7 @@ def generate_launch_description():
 
     set_env_vars_resources = AppendEnvironmentVariable(
             'GZ_SIM_RESOURCE_PATH',
-            os.path.join(desc_dir))
+            str(Path(os.path.join(desc_dir)).parent.resolve()))
 
     # Create the launch description and populate
     ld = LaunchDescription()
