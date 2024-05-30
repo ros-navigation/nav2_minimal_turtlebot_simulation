@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- The robot has a bumper with 5 contact sensors. The center one is
+functional, while the 4 remaining ones are created as dummy links. -->
+<xacro:macro name="dummy_bumper_zone" params="name parent_link:=base_link *origin">
+  <xacro:property name="link_name" value="${name}"/>
+  <xacro:property name="joint_name" value="${name}_joint"/>
+
+  <joint name="${joint_name}" type="fixed">
+    <parent link="${parent_link}"/>
+    <child link="${link_name}"/>
+    <xacro:insert_block name="origin"/>
+  </joint>
+  <link name="${link_name}"/>
+</xacro:macro>
+
+<xacro:macro name="bumper" params="name:=bumper namespace parent_link:=base_link update_rate:=62.0 gazebo visual_mesh collision_mesh
+  *origin *inertial">
+  <xacro:property name="link_name" value="${name}"/>
+  <xacro:property name="joint_name" value="${name}_joint"/>
+
+  <joint name="${joint_name}" type="fixed">
+    <parent link="${parent_link}"/>
+    <child link="${link_name}"/>
+    <xacro:insert_block name="origin"/>
+  </joint>
+  <link name="${link_name}">
+    <visual>
+      <geometry>
+        <mesh filename="${visual_mesh}"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="${collision_mesh}"/>
+      </geometry>
+    </collision>
+    <xacro:insert_block name="inertial"/>
+  </link>
+
+  <xacro:dummy_bumper_zone
+      name="bump_front_center">
+      <origin xyz="0.175 0 0.039" rpy="0 0 0"/>
+  </xacro:dummy_bumper_zone>
+
+  <xacro:dummy_bumper_zone
+      name="bump_front_left">
+      <origin xyz="0.02345 -0.0875 0.025" rpy="0 0 0.5235985"/>
+  </xacro:dummy_bumper_zone>
+
+  <xacro:dummy_bumper_zone
+      name="bump_front_right">
+      <origin xyz="0.02345 0.0875 0.025" rpy="0 0 -0.5235985"/>
+  </xacro:dummy_bumper_zone>
+
+  <xacro:dummy_bumper_zone
+      name="bump_left">
+      <origin xyz="0.0875 -0.15155 0.025" rpy="0 0 1.047193"/>
+  </xacro:dummy_bumper_zone>
+
+  <xacro:dummy_bumper_zone
+      name="bump_right">
+      <origin xyz="0.0875 0.15155 0.025" rpy="0 0 -1.047193"/>
+  </xacro:dummy_bumper_zone>
+
+</xacro:macro>
+
+</robot>

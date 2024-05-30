@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:macro name="wheel" params="name gazebo parent_link *origin">
+
+  <xacro:property name="mass"   value="0.2" />
+  <xacro:property name="radius" value="${3.575*cm2m}" />
+  <xacro:property name="width"  value="${1.5*cm2m}" />
+
+  <xacro:property name="wheel_link_name"  value="${name}_wheel"/>
+  <xacro:property name="wheel_joint_name" value="${wheel_link_name}_joint"/>
+
+  <joint name="${wheel_joint_name}" type="continuous">
+    <parent link="${parent_link}"/>
+    <child link="${wheel_link_name}"/>
+    <xacro:insert_block name="origin"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="${wheel_link_name}">
+    <visual>
+      <geometry>
+        <cylinder length="${width}" radius="${radius}"/>
+      </geometry>
+      <!-- Give black color to wheels in Rviz -->
+      <xacro:insert_block name="material_black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${width}" radius="${radius}"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="${mass}" radius="${radius}"
+      length="${width}" />
+  </link>
+
+  <gazebo reference="${wheel_link_name}">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.0001</minDepth>
+    <maxVel>1.0</maxVel>
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+</xacro:macro>
+</robot>
