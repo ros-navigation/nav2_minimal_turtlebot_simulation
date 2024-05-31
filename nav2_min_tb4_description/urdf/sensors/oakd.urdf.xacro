@@ -137,6 +137,7 @@
       </camera>
       <update_rate>10</update_rate>
       <visualize>true</visualize>
+      <topic>rgbd_camera</topic>
     </sensor>
     <xacro:material_darkgray/>
   </gazebo>

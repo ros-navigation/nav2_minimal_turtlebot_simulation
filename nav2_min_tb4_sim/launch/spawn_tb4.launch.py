@@ -73,6 +73,7 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
+        name='bridge_ros_gz',
         parameters=[
             {
                 'config_file': os.path.join(
@@ -83,6 +84,26 @@ def generate_launch_description():
         ],
         output='screen',
     )
+
+    camera_bridge_image = Node(
+        package='ros_gz_image',
+        executable='image_bridge',
+        name='bridge_gz_ros_camera_image',
+        output='screen',
+        parameters=[{
+            'use_sim_time': use_sim_time,
+        }],
+        arguments=['/rgbd_camera/image'])
+
+    camera_bridge_depth = Node(
+        package='ros_gz_image',
+        executable='image_bridge',
+        name='bridge_gz_ros_camera_depth',
+        output='screen',
+        parameters=[{
+            'use_sim_time': use_sim_time,
+        }],
+        arguments=['/rgbd_camera/depth_image'])
 
     spawn_model = Node(
         condition=IfCondition(use_simulator),
@@ -114,5 +135,7 @@ def generate_launch_description():
     ld.add_action(set_env_vars_resources)
 
     ld.add_action(bridge)
+    ld.add_action(camera_bridge_image)
+    ld.add_action(camera_bridge_depth)
     ld.add_action(spawn_model)
     return ld
