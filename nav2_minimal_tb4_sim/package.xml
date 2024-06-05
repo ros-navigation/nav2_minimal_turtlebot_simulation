@@ -11,7 +11,11 @@
 
   <depend>nav2_minimal_tb4_description</depend>
   <depend>ros_gz_bridge</depend>
+  <depend>ros_gz_image</depend>
   <depend>ros_gz_interfaces</depend>
+  <depend>ros_gz_sim</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>xacro</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
