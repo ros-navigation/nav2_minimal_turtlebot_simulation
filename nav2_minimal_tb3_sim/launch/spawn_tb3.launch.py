@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import os
+from pathlib import Path
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -88,8 +89,10 @@ def generate_launch_description():
     )
 
     set_env_vars_resources = AppendEnvironmentVariable(
+        'GZ_SIM_RESOURCE_PATH', os.path.join(bringup_dir, 'models'))
+    set_env_vars_resources2 = AppendEnvironmentVariable(
             'GZ_SIM_RESOURCE_PATH',
-            os.path.join(bringup_dir, 'models'))
+            str(Path(os.path.join(bringup_dir)).parent.resolve()))
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -99,6 +102,7 @@ def generate_launch_description():
     ld.add_action(declare_use_simulator_cmd)
 
     ld.add_action(set_env_vars_resources)
+    ld.add_action(set_env_vars_resources2)
 
     ld.add_action(bridge)
     ld.add_action(spawn_model)
