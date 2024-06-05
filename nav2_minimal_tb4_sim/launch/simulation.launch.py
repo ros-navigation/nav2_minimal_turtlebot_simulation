@@ -30,8 +30,8 @@ from launch.actions import (
     RegisterEventHandler,
 )
 from launch.conditions import IfCondition
-from launch.substitutions import Command
 from launch.event_handlers import OnShutdown
+from launch.substitutions import Command
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PythonExpression
 
@@ -131,7 +131,7 @@ def generate_launch_description():
         output='screen',
         parameters=[
             {'use_sim_time': use_sim_time,
-            'robot_description': Command(['xacro', ' ', robot_sdf])}
+             'robot_description': Command(['xacro', ' ', robot_sdf])}
         ],
         remappings=remappings,
     )
