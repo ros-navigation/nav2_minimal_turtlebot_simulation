@@ -125,7 +125,7 @@ def generate_launch_description():
     )
 
     declare_robot_name_cmd = DeclareLaunchArgument(
-        'robot_name', default_value='turtlebot3_waffle', description='name of the robot'
+        'robot_name', default_value='nav2_turtlebot4', description='name of the robot'
     )
 
     declare_robot_sdf_cmd = DeclareLaunchArgument(

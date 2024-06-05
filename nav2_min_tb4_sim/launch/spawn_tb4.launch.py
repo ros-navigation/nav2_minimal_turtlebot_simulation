@@ -36,7 +36,7 @@ def generate_launch_description():
     use_simulator = LaunchConfiguration('use_simulator')
     robot_name = LaunchConfiguration('robot_name')
     robot_sdf = LaunchConfiguration('robot_sdf')
-    pose = {'x': LaunchConfiguration('x_pose', default='-2.00'),
+    pose = {'x': LaunchConfiguration('x_pose', default='-8.00'),
             'y': LaunchConfiguration('y_pose', default='-0.50'),
             'z': LaunchConfiguration('z_pose', default='0.01'),
             'R': LaunchConfiguration('roll', default='0.00'),
@@ -113,7 +113,7 @@ def generate_launch_description():
         arguments=[
             '-entity', robot_name,
             '-topic', 'robot_description',
-            # '-file', Command(['xacro', ' ', robot_sdf]), # TODO robot SDF file just unhappy.
+            # '-file', Command(['xacro', ' ', robot_sdf]), # TODO SDF file is unhappy, not sure why
             '-robot_namespace', namespace,
             '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
             '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']],
