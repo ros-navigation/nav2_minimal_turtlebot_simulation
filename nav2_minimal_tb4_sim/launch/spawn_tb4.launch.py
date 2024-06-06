@@ -15,6 +15,7 @@
 
 import os
 from pathlib import Path
+
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
@@ -22,7 +23,6 @@ from launch.actions import AppendEnvironmentVariable
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
-from launch.substitutions import Command
 
 from launch_ros.actions import Node
 
@@ -35,7 +35,7 @@ def generate_launch_description():
     namespace = LaunchConfiguration('namespace')
     use_simulator = LaunchConfiguration('use_simulator')
     robot_name = LaunchConfiguration('robot_name')
-    robot_sdf = LaunchConfiguration('robot_sdf')
+    # robot_sdf = LaunchConfiguration('robot_sdf')
     pose = {'x': LaunchConfiguration('x_pose', default='-8.00'),
             'y': LaunchConfiguration('y_pose', default='-0.50'),
             'z': LaunchConfiguration('z_pose', default='0.01'),
@@ -65,10 +65,10 @@ def generate_launch_description():
         default_value='turtlebot4',
         description='name of the robot')
 
-    declare_robot_sdf_cmd = DeclareLaunchArgument(
-        'robot_sdf',
-        default_value=os.path.join(desc_dir, 'urdf', 'standard', 'turtlebot4.urdf.xacro'),
-        description='Full path to robot sdf file to spawn the robot in gazebo')
+    # declare_robot_sdf_cmd = DeclareLaunchArgument(
+    #     'robot_sdf',
+    #     default_value=os.path.join(desc_dir, 'urdf', 'standard', 'turtlebot4.urdf.xacro'),
+    #     description='Full path to robot sdf file to spawn the robot in gazebo')
 
     bridge = Node(
         package='ros_gz_bridge',
@@ -128,7 +128,7 @@ def generate_launch_description():
     ld = LaunchDescription()
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_robot_name_cmd)
-    ld.add_action(declare_robot_sdf_cmd)
+    # ld.add_action(declare_robot_sdf_cmd)
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_sim_time_cmd)
 

@@ -29,10 +29,10 @@ from launch.actions import (
     OpaqueFunction,
     RegisterEventHandler,
 )
-from launch.substitutions import Command
 from launch.conditions import IfCondition
 from launch.event_handlers import OnShutdown
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import Command
 from launch.substitutions import LaunchConfiguration, PythonExpression
 
 from launch_ros.actions import Node
@@ -46,14 +46,12 @@ def generate_launch_description():
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
-    use_namespace = LaunchConfiguration('use_namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     # Launch configuration variables specific to simulation
     rviz_config_file = LaunchConfiguration('rviz_config_file')
     use_simulator = LaunchConfiguration('use_simulator')
     use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
-    use_rviz = LaunchConfiguration('use_rviz')
     headless = LaunchConfiguration('headless')
     world = LaunchConfiguration('world')
     pose = {
@@ -80,12 +78,6 @@ def generate_launch_description():
         'namespace', default_value='', description='Top-level namespace'
     )
 
-    declare_use_namespace_cmd = DeclareLaunchArgument(
-        'use_namespace',
-        default_value='false',
-        description='Whether to apply a namespace to the navigation stack',
-    )
-
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
         default_value='True',
@@ -108,10 +100,6 @@ def generate_launch_description():
         'use_robot_state_pub',
         default_value='True',
         description='Whether to start the robot state publisher',
-    )
-
-    declare_use_rviz_cmd = DeclareLaunchArgument(
-        'use_rviz', default_value='True', description='Whether to start RVIZ'
     )
 
     declare_simulator_cmd = DeclareLaunchArgument(
@@ -143,7 +131,7 @@ def generate_launch_description():
         output='screen',
         parameters=[
             {'use_sim_time': use_sim_time,
-            'robot_description': Command(['xacro', ' ', robot_sdf])}
+             'robot_description': Command(['xacro', ' ', robot_sdf])}
         ],
         remappings=remappings,
     )
@@ -214,13 +202,11 @@ def generate_launch_description():
 
     # Declare the launch options
     ld.add_action(declare_namespace_cmd)
-    ld.add_action(declare_use_namespace_cmd)
     ld.add_action(declare_use_sim_time_cmd)
 
     ld.add_action(declare_rviz_config_file_cmd)
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
-    ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_simulator_cmd)
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_robot_name_cmd)
