@@ -71,6 +71,8 @@ def generate_launch_description():
                 'config_file': os.path.join(
                     bringup_dir, 'configs', 'turtlebot3_waffle_bridge.yaml'
                 ),
+                'expand_gz_topic_names': True,
+                'use_sim_time': True,
             }
         ],
         output='screen',
