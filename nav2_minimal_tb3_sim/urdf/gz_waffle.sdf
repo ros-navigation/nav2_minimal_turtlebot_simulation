@@ -469,8 +469,8 @@
         <min_linear_velocity>-0.46</min_linear_velocity>
         <max_angular_velocity>1.9</max_angular_velocity>
         <min_angular_velocity>-1.9</min_angular_velocity>
-        <topic>/cmd_vel</topic>
-        <odom_topic>/odom</odom_topic>
+        <topic>cmd_vel</topic>
+        <odom_topic>odom</odom_topic>
         <tf_topic>tf</tf_topic>
         <frame_id>odom</frame_id>
         <child_frame_id>base_footprint</child_frame_id>

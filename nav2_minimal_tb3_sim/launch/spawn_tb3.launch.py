@@ -65,6 +65,7 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
+        namespace=namespace,
         parameters=[
             {
                 'config_file': os.path.join(
@@ -80,6 +81,7 @@ def generate_launch_description():
         package='ros_gz_sim',
         executable='create',
         output='screen',
+        namespace=namespace,
         arguments=[
             '-entity', robot_name,
             '-file', robot_sdf,
