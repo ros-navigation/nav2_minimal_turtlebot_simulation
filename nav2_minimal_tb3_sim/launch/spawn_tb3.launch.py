@@ -15,16 +15,16 @@
 
 import os
 from pathlib import Path
-from launch.substitutions.command import Command
-from launch.substitutions.find_executable import FindExecutable
+
 
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import AppendEnvironmentVariable
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
+from launch.substitutions.command import Command
+from launch.substitutions.find_executable import FindExecutable
 
 from launch_ros.actions import Node
 
@@ -82,7 +82,7 @@ def generate_launch_description():
         arguments=[
             '-name', robot_name,
             '-string', Command([
-                FindExecutable(name="xacro"), ' ', 'namespace:=',
+                FindExecutable(name='xacro'), ' ', 'namespace:=',
                 LaunchConfiguration('namespace'), ' ', robot_sdf]),
             '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
             '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']]
