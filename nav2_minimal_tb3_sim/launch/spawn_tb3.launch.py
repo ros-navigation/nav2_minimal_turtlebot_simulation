@@ -16,13 +16,15 @@
 import os
 from pathlib import Path
 
+
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import AppendEnvironmentVariable
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
+from launch.substitutions.command import Command
+from launch.substitutions.find_executable import FindExecutable
 
 from launch_ros.actions import Node
 
@@ -31,7 +33,6 @@ def generate_launch_description():
     bringup_dir = get_package_share_directory('nav2_minimal_tb3_sim')
 
     namespace = LaunchConfiguration('namespace')
-    use_simulator = LaunchConfiguration('use_simulator')
     robot_name = LaunchConfiguration('robot_name')
     robot_sdf = LaunchConfiguration('robot_sdf')
     pose = {'x': LaunchConfiguration('x_pose', default='-2.00'),
@@ -47,11 +48,6 @@ def generate_launch_description():
         default_value='',
         description='Top-level namespace')
 
-    declare_use_simulator_cmd = DeclareLaunchArgument(
-        'use_simulator',
-        default_value='True',
-        description='Whether to start the simulator')
-
     declare_robot_name_cmd = DeclareLaunchArgument(
         'robot_name',
         default_value='turtlebot3_waffle',
@@ -59,7 +55,7 @@ def generate_launch_description():
 
     declare_robot_sdf_cmd = DeclareLaunchArgument(
         'robot_sdf',
-        default_value=os.path.join(bringup_dir, 'urdf', 'gz_waffle.sdf'),
+        default_value=os.path.join(bringup_dir, 'urdf', 'gz_waffle.sdf.xacro'),
         description='Full path to robot sdf file to spawn the robot in gazebo')
 
     bridge = Node(
@@ -79,15 +75,15 @@ def generate_launch_description():
     )
 
     spawn_model = Node(
-        condition=IfCondition(use_simulator),
         package='ros_gz_sim',
         executable='create',
         output='screen',
         namespace=namespace,
         arguments=[
-            '-entity', robot_name,
-            '-file', robot_sdf,
-            '-robot_namespace', namespace,
+            '-name', robot_name,
+            '-string', Command([
+                FindExecutable(name='xacro'), ' ', 'namespace:=',
+                LaunchConfiguration('namespace'), ' ', robot_sdf]),
             '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
             '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']]
     )
@@ -103,7 +99,6 @@ def generate_launch_description():
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_robot_name_cmd)
     ld.add_action(declare_robot_sdf_cmd)
-    ld.add_action(declare_use_simulator_cmd)
 
     ld.add_action(set_env_vars_resources)
     ld.add_action(set_env_vars_resources2)
