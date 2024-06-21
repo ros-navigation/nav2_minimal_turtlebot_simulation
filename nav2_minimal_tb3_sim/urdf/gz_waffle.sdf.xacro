@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<sdf version="1.6">
+<sdf version="1.6" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:arg name="namespace" default=""/>
+
     <model name="turtlebot3_waffle"> 
       <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
 
@@ -47,7 +49,7 @@
         <sensor name="tb3_imu" type="imu">
           <always_on>true</always_on>
           <update_rate>200</update_rate>
-          <topic>imu</topic>
+          <topic>$(arg namespace)/imu</topic>
           <gz_frame_id>imu_link</gz_frame_id>
           <imu>
             <angular_velocity>
@@ -136,7 +138,7 @@
           <visualize>true</visualize>
           <pose>-0.064 0 0.15 0 0 0</pose>
           <update_rate>5</update_rate>
-          <topic>scan</topic>
+          <topic>$(arg namespace)/scan</topic>
           <gz_frame_id>base_scan</gz_frame_id>
           <ray>
             <scan>
@@ -469,9 +471,9 @@
         <min_linear_velocity>-0.46</min_linear_velocity>
         <max_angular_velocity>1.9</max_angular_velocity>
         <min_angular_velocity>-1.9</min_angular_velocity>
-        <topic>/cmd_vel</topic>
-        <odom_topic>/odom</odom_topic>
-        <tf_topic>tf</tf_topic>
+        <topic>$(arg namespace)/cmd_vel</topic>
+        <odom_topic>$(arg namespace)/odom</odom_topic>
+        <tf_topic>$(arg namespace)/tf</tf_topic>
         <frame_id>odom</frame_id>
         <child_frame_id>base_footprint</child_frame_id>
         <odom_publish_frequency>30</odom_publish_frequency>
@@ -482,7 +484,7 @@
         name="gz::sim::systems::JointStatePublisher">
         <joint_name>wheel_left_joint</joint_name>
         <joint_name>wheel_right_joint</joint_name>
-        <topic>joint_states</topic>
+        <topic>$(arg namespace)/joint_states</topic>
         <update_rate>30</update_rate>
       </plugin>
 
