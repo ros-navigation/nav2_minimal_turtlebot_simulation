@@ -50,6 +50,7 @@ def generate_launch_description():
 
     # Launch configuration variables specific to simulation
     rviz_config_file = LaunchConfiguration('rviz_config_file')
+    use_rviz = LaunchConfiguration('use_rviz')
     use_simulator = LaunchConfiguration('use_simulator')
     use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
     headless = LaunchConfiguration('headless')
@@ -88,6 +89,12 @@ def generate_launch_description():
         'rviz_config_file',
         default_value=os.path.join(desc_dir, 'rviz', 'config.rviz'),
         description='Full path to the RVIZ config file to use',
+    )
+
+    declare_use_rviz_cmd = DeclareLaunchArgument(
+        'use_rviz',
+        default_value='True',
+        description='Whether to start rviz',
     )
 
     declare_use_simulator_cmd = DeclareLaunchArgument(
@@ -137,6 +144,7 @@ def generate_launch_description():
     )
 
     rviz_cmd = Node(
+        condition=IfCondition(use_rviz),
         package='rviz2',
         executable='rviz2',
         name='rviz2',
@@ -205,6 +213,7 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_cmd)
 
     ld.add_action(declare_rviz_config_file_cmd)
+    ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
     ld.add_action(declare_simulator_cmd)
