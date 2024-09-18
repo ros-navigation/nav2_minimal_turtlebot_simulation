@@ -49,7 +49,7 @@
         <sensor name="tb3_imu" type="imu">
           <always_on>true</always_on>
           <update_rate>200</update_rate>
-          <topic>$(arg namespace)/imu</topic>
+          <topic>$(arg namespace)/imu/data</topic>
           <gz_frame_id>imu_link</gz_frame_id>
           <imu>
             <angular_velocity>
@@ -96,18 +96,18 @@
         </sensor>
       </link>
 
-      <link name="navsat_link">        
+      <link name="gps_link">        
         <sensor name="navsat" type="navsat">
           <always_on>true</always_on>
           <update_rate>1</update_rate>
-          <topic>$(arg namespace)/navsat</topic>
-          <pose>0 0 0 0 0 0</pose>
+          <topic>$(arg namespace)/gps/fix</topic>
+          <gz_frame_id>gps_link</gz_frame_id>
           <navsat>
             <position_sensing>
               <horizontal>
                 <noise type="gaussian">
                   <mean>0.0</mean>
-                  <stddev>0.1</stddev>
+                  <stddev>0.0</stddev>
                 </noise>
               </horizontal>
               <vertical>
@@ -478,6 +478,18 @@
         <axis>
           <xyz>0 0 1</xyz>
         </axis>
+      </joint>
+
+      <joint name="imu_joint" type="fixed">
+        <parent>base_link</parent>
+        <child>imu_link</child>
+        <pose>0.0 0 0.068 0 0 0</pose>
+      </joint>
+
+      <joint name="gps_joint" type="fixed">
+        <parent>base_link</parent>
+        <child>gps_link</child>
+        <pose>-0.05 0 0.05 0 0 0</pose>
       </joint>
 
 

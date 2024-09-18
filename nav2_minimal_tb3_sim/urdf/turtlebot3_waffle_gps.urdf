@@ -199,12 +199,12 @@
 
   <link name="imu_link"/>
 
-  <joint name="navsat_joint" type="fixed">
+  <joint name="gps_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="navsat_link"/>
+    <child link="gps_link"/>
     <origin xyz="-0.05 0 0.05" rpy="0 0 0"/>
-
-  <link name="navsat_link"/>
+  </joint>
+  <link name="gps_link"/>
 
   <joint name="scan_joint" type="fixed">
     <parent link="base_link"/>

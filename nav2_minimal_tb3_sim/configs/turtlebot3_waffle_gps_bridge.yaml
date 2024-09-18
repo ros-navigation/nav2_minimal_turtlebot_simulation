@@ -26,7 +26,7 @@
   direction: GZ_TO_ROS
 
 # replace imu_bridge - check gz topic name
-- topic_name: "imu"
+- topic_name: "imu/data"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
@@ -44,7 +44,7 @@
   direction: ROS_TO_GZ
 
 # replae navsat_bridge - check gz topic name
-- topic_name: "navsat"
+- topic_name: "gps/fix"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
-  gz_type_name: "gz.msgs.GPS"
+  gz_type_name: "gz.msgs.NavSat"
   direction: GZ_TO_ROS
