@@ -24,12 +24,12 @@ from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 
-from launch_ros.actions import Node
+from launch_ros.actions import Node, PushRosNamespace
 
 
 def generate_launch_description():
     sim_dir = get_package_share_directory('nav2_minimal_tb4_sim')
-    desc_dir = get_package_share_directory('nav2_minimal_tb4_description')
+    # desc_dir = get_package_share_directory('nav2_minimal_tb4_description')
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     namespace = LaunchConfiguration('namespace')
@@ -106,23 +106,17 @@ def generate_launch_description():
         arguments=['/rgbd_camera/depth_image'])
 
     spawn_model = Node(
-        condition=IfCondition(use_simulator),
         package='ros_gz_sim',
         executable='create',
         output='screen',
         arguments=[
-            '-entity', robot_name,
+            '-name', robot_name,
             '-topic', 'robot_description',
             # '-file', Command(['xacro', ' ', robot_sdf]), # TODO SDF file is unhappy, not sure why
-            '-robot_namespace', namespace,
             '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
             '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']],
         parameters=[{'use_sim_time': use_sim_time}]
     )
-
-    set_env_vars_resources = AppendEnvironmentVariable(
-            'GZ_SIM_RESOURCE_PATH',
-            str(Path(os.path.join(desc_dir)).parent.resolve()))
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -132,7 +126,7 @@ def generate_launch_description():
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_sim_time_cmd)
 
-    ld.add_action(set_env_vars_resources)
+    ld.add_action(PushRosNamespace(namespace))
 
     ld.add_action(bridge)
     ld.add_action(camera_bridge_image)
