@@ -43,7 +43,7 @@
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
 
-# replae navsat_bridge - check gz topic name
+# replace navsat_bridge - check gz topic name
 - topic_name: "gps/fix"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
   gz_type_name: "gz.msgs.NavSat"
