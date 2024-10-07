@@ -22,7 +22,7 @@ from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 
-from launch_ros.actions import Node, PushRosNamespace
+from launch_ros.actions import Node
 
 
 def generate_launch_description():
@@ -72,6 +72,7 @@ def generate_launch_description():
         package='ros_gz_bridge',
         executable='parameter_bridge',
         name='bridge_ros_gz',
+        namespace=namespace,
         parameters=[
             {
                 'config_file': os.path.join(
@@ -87,6 +88,7 @@ def generate_launch_description():
         package='ros_gz_image',
         executable='image_bridge',
         name='bridge_gz_ros_camera_image',
+        namespace=namespace,
         output='screen',
         parameters=[{
             'use_sim_time': use_sim_time,
@@ -97,6 +99,7 @@ def generate_launch_description():
         package='ros_gz_image',
         executable='image_bridge',
         name='bridge_gz_ros_camera_depth',
+        namespace=namespace,
         output='screen',
         parameters=[{
             'use_sim_time': use_sim_time,
@@ -107,6 +110,7 @@ def generate_launch_description():
         condition=IfCondition(use_simulator),
         package='ros_gz_sim',
         executable='create',
+        namespace=namespace,
         output='screen',
         arguments=[
             '-name', robot_name,
@@ -124,8 +128,6 @@ def generate_launch_description():
     # ld.add_action(declare_robot_sdf_cmd)
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_sim_time_cmd)
-
-    ld.add_action(PushRosNamespace(namespace))
 
     ld.add_action(bridge)
     ld.add_action(camera_bridge_image)
