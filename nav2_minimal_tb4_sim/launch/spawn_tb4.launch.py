@@ -27,7 +27,6 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     sim_dir = get_package_share_directory('nav2_minimal_tb4_sim')
-    # desc_dir = get_package_share_directory('nav2_minimal_tb4_description')
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     namespace = LaunchConfiguration('namespace')
@@ -62,11 +61,6 @@ def generate_launch_description():
         'robot_name',
         default_value='turtlebot4',
         description='name of the robot')
-
-    # declare_robot_sdf_cmd = DeclareLaunchArgument(
-    #     'robot_sdf',
-    #     default_value=os.path.join(desc_dir, 'urdf', 'standard', 'turtlebot4.urdf.xacro'),
-    #     description='Full path to robot sdf file to spawn the robot in gazebo')
 
     bridge = Node(
         package='ros_gz_bridge',
@@ -115,7 +109,6 @@ def generate_launch_description():
         arguments=[
             '-name', robot_name,
             '-topic', 'robot_description',
-            # '-file', Command(['xacro', ' ', robot_sdf]), # TODO SDF file is unhappy, not sure why
             '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
             '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']],
         parameters=[{'use_sim_time': use_sim_time}]
@@ -125,7 +118,6 @@ def generate_launch_description():
     ld = LaunchDescription()
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_robot_name_cmd)
-    # ld.add_action(declare_robot_sdf_cmd)
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_sim_time_cmd)
 
