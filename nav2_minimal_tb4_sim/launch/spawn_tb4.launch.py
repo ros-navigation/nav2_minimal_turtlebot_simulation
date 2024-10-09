@@ -14,12 +14,10 @@
 # limitations under the License.
 
 import os
-from pathlib import Path
 
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import AppendEnvironmentVariable
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
@@ -29,7 +27,6 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     sim_dir = get_package_share_directory('nav2_minimal_tb4_sim')
-    desc_dir = get_package_share_directory('nav2_minimal_tb4_description')
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     namespace = LaunchConfiguration('namespace')
@@ -65,15 +62,11 @@ def generate_launch_description():
         default_value='turtlebot4',
         description='name of the robot')
 
-    # declare_robot_sdf_cmd = DeclareLaunchArgument(
-    #     'robot_sdf',
-    #     default_value=os.path.join(desc_dir, 'urdf', 'standard', 'turtlebot4.urdf.xacro'),
-    #     description='Full path to robot sdf file to spawn the robot in gazebo')
-
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         name='bridge_ros_gz',
+        namespace=namespace,
         parameters=[
             {
                 'config_file': os.path.join(
@@ -89,6 +82,7 @@ def generate_launch_description():
         package='ros_gz_image',
         executable='image_bridge',
         name='bridge_gz_ros_camera_image',
+        namespace=namespace,
         output='screen',
         parameters=[{
             'use_sim_time': use_sim_time,
@@ -99,6 +93,7 @@ def generate_launch_description():
         package='ros_gz_image',
         executable='image_bridge',
         name='bridge_gz_ros_camera_depth',
+        namespace=namespace,
         output='screen',
         parameters=[{
             'use_sim_time': use_sim_time,
@@ -109,30 +104,22 @@ def generate_launch_description():
         condition=IfCondition(use_simulator),
         package='ros_gz_sim',
         executable='create',
+        namespace=namespace,
         output='screen',
         arguments=[
-            '-entity', robot_name,
+            '-name', robot_name,
             '-topic', 'robot_description',
-            # '-file', Command(['xacro', ' ', robot_sdf]), # TODO SDF file is unhappy, not sure why
-            '-robot_namespace', namespace,
             '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
             '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']],
         parameters=[{'use_sim_time': use_sim_time}]
     )
 
-    set_env_vars_resources = AppendEnvironmentVariable(
-            'GZ_SIM_RESOURCE_PATH',
-            str(Path(os.path.join(desc_dir)).parent.resolve()))
-
     # Create the launch description and populate
     ld = LaunchDescription()
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_robot_name_cmd)
-    # ld.add_action(declare_robot_sdf_cmd)
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_sim_time_cmd)
-
-    ld.add_action(set_env_vars_resources)
 
     ld.add_action(bridge)
     ld.add_action(camera_bridge_image)
