@@ -31,6 +31,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     namespace = LaunchConfiguration('namespace')
     use_simulator = LaunchConfiguration('use_simulator')
+    use_3dlidar = LaunchConfiguration('use_3dlidar')
     robot_name = LaunchConfiguration('robot_name')
     # robot_sdf = LaunchConfiguration('robot_sdf')
     pose = {'x': LaunchConfiguration('x_pose', default='-8.00'),
@@ -50,6 +51,12 @@ def generate_launch_description():
         'use_simulator',
         default_value='True',
         description='Whether to start the simulator')
+
+    declare_use_3dlidar_cmd = DeclareLaunchArgument(
+        'use_3dlidar',
+        default_value='False',
+        description='Whether to use 3D Lidar and publish pointcloud2'
+    )
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
@@ -76,6 +83,24 @@ def generate_launch_description():
             }
         ],
         output='screen',
+    )
+
+    # replace [ros_gz_point_cloud that only works with ign-gazebo <= 2.6.1]
+    # https://github.com/gazebosim/ros_gz/issues/40
+    pcl_bridge = Node(
+        condition=IfCondition(use_3dlidar),
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        name='bridge_ros_gz_pcl',
+        namespace=namespace,
+        output='screen',
+        parameters=[{
+            'use_sim_time': use_sim_time,
+        }],
+        remappings=[
+            ('/scan/points', '/pointcloud')
+        ],
+        arguments=['/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked'],
     )
 
     camera_bridge_image = Node(
@@ -119,9 +144,11 @@ def generate_launch_description():
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_robot_name_cmd)
     ld.add_action(declare_use_simulator_cmd)
+    ld.add_action(declare_use_3dlidar_cmd)
     ld.add_action(declare_use_sim_time_cmd)
 
     ld.add_action(bridge)
+    ld.add_action(pcl_bridge)
     ld.add_action(camera_bridge_image)
     ld.add_action(camera_bridge_depth)
     ld.add_action(spawn_model)
