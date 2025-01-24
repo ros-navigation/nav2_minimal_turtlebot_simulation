@@ -54,6 +54,7 @@ def generate_launch_description():
     use_simulator = LaunchConfiguration('use_simulator')
     use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
     headless = LaunchConfiguration('headless')
+    use_3dlidar = LaunchConfiguration('use_3dlidar')
     world = LaunchConfiguration('world')
     pose = {
         'x': LaunchConfiguration('x_pose', default='-8.00'),
@@ -113,6 +114,12 @@ def generate_launch_description():
         'headless', default_value='False', description='Whether to execute gzclient)'
     )
 
+    declare_use_3dlidar_cmd = DeclareLaunchArgument(
+        'use_3dlidar',
+        default_value='False',
+        description='Whether to use 3D Lidar and publish pointcloud2'
+    )
+
     declare_world_cmd = DeclareLaunchArgument(
         'world',
         default_value=os.path.join(sim_dir, 'worlds', 'depot.sdf'),
@@ -138,7 +145,9 @@ def generate_launch_description():
         output='screen',
         parameters=[
             {'use_sim_time': use_sim_time,
-             'robot_description': Command(['xacro', ' ', robot_sdf])}
+             'robot_description': Command(
+                ['xacro', ' ', 'use_3d_lidar:=', use_3dlidar, ' ', robot_sdf]
+                )}
         ],
         remappings=remappings,
     )
@@ -196,6 +205,7 @@ def generate_launch_description():
         launch_arguments={'namespace': namespace,
                           'use_simulator': use_simulator,
                           'use_sim_time': use_sim_time,
+                          'use_3dlidar': use_3dlidar,
                           'robot_name': robot_name,
                           'robot_sdf': robot_sdf,
                           'x_pose': pose['x'],
@@ -217,6 +227,7 @@ def generate_launch_description():
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
     ld.add_action(declare_simulator_cmd)
+    ld.add_action(declare_use_3dlidar_cmd)
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_robot_name_cmd)
     ld.add_action(declare_robot_sdf_cmd)

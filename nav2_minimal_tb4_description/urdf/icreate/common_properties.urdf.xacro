@@ -48,8 +48,9 @@
   </xacro:macro>
 
   <xacro:macro name="ray_sensor" 
-    params="sensor_name gazebo update_rate visualize 
+    params="sensor_name use_vertical_rays:=^|false gazebo update_rate visualize 
             h_samples h_res h_min_angle h_max_angle
+            v_samples:=^|0 v_res:=^|0 v_min_angle:=^|0 v_max_angle:=^|0
             r_min r_max r_res *plugin">
     <sensor name="${sensor_name}" type="gpu_lidar">
       <update_rate>${update_rate}</update_rate>
@@ -65,6 +66,14 @@
             <min_angle>${h_min_angle}</min_angle>
             <max_angle>${h_max_angle}</max_angle>
           </horizontal>
+          <xacro:if value="${use_vertical_rays}">
+            <vertical>
+              <samples>${v_samples}</samples>
+              <resolution>${v_res}</resolution>
+              <min_angle>${v_min_angle}</min_angle>
+              <max_angle>${v_max_angle}</max_angle>
+            </vertical>
+          </xacro:if>
         </scan>
         <range>
           <min>${r_min}</min>
