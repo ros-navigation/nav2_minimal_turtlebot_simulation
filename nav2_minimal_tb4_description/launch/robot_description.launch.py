@@ -43,6 +43,8 @@ def generate_launch_description():
     rviz_config_file = PathJoinSubstitution([pkg_turtlebot4_description, 'rviz', 'config.rviz'])
     namespace = LaunchConfiguration('namespace')
 
+    remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
+
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -53,10 +55,7 @@ def generate_launch_description():
             {'robot_description': Command(['xacro', ' ', xacro_file,
              ' ', 'namespace:=', namespace])},
         ],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static')
-        ]
+        remappings=remappings
     )
 
     joint_state_publisher = Node(
@@ -65,10 +64,7 @@ def generate_launch_description():
         name='joint_state_publisher',
         output='screen',
         parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static')
-        ]
+        remappings=remappings
     )
 
     rviz2 = Node(
@@ -78,10 +74,7 @@ def generate_launch_description():
         output='screen',
         arguments=['-d', rviz_config_file],
         parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static')
-        ],
+        remappings=remappings,
     )
 
     ld = LaunchDescription(ARGUMENTS)
