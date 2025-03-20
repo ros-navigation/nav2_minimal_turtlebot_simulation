@@ -151,10 +151,7 @@ def generate_launch_description():
         output='screen',
         arguments=['-d', rviz_config_file],
         parameters=[{'use_sim_time': use_sim_time}],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static')
-        ],
+        remappings=remappings,
     )
 
     # The SDF file for the world is a xacro file because we wanted to
