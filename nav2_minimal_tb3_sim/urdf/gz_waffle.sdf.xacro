@@ -9,7 +9,7 @@
 
       <link name="base_link">
 
-        <inertial>
+        <inertial> 
           <pose>-0.064 0 0.048 0 0 0</pose>
           <inertia>
             <ixx>0.001</ixx>
@@ -299,7 +299,7 @@
         <collision name='collision'>
           <geometry>
             <sphere>
-              <radius>0.005000</radius>
+              <radius>0.006000</radius>
             </sphere>
           </geometry>
           <surface>
@@ -333,7 +333,7 @@
         <collision name='collision'>
           <geometry>
             <sphere>
-              <radius>0.005000</radius>
+              <radius>0.006000</radius>
             </sphere>
           </geometry>
           <surface>
