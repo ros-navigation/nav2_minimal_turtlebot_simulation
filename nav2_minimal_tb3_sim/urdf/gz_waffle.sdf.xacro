@@ -299,7 +299,7 @@
         <collision name='collision'>
           <geometry>
             <sphere>
-              <radius>0.005000</radius>
+              <radius>0.006000</radius>
             </sphere>
           </geometry>
           <surface>
@@ -333,7 +333,7 @@
         <collision name='collision'>
           <geometry>
             <sphere>
-              <radius>0.005000</radius>
+              <radius>0.006000</radius>
             </sphere>
           </geometry>
           <surface>
