@@ -455,6 +455,12 @@
         </axis>
       </joint>
 
+      <joint name="imu_joint" type="fixed">
+        <parent>base_link</parent>
+        <child>imu_link</child>
+        <pose>0.0 0 0.068 0 0 0</pose>
+      </joint>
+
 
       <plugin
         filename="gz-sim-diff-drive-system"
