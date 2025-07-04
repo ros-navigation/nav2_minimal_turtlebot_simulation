@@ -105,6 +105,8 @@
           <navsat>
             <position_sensing>
               <horizontal>
+              <!-- Be carefull setting this.
+              Units in degree not in meters https://github.com/gazebosim/sdformat/issues/1572 -->
                 <noise type="gaussian">
                   <mean>0.0</mean>
                   <stddev>0.0</stddev>
@@ -496,10 +498,14 @@
       <plugin
         filename="gz-sim-diff-drive-system"
         name="gz::sim::systems::DiffDrive">
+
+        <!-- wheel information -->
         <left_joint>wheel_left_joint</left_joint>
         <right_joint>wheel_right_joint</right_joint>
         <wheel_separation>0.287</wheel_separation>
         <wheel_radius>0.033</wheel_radius>
+
+        <!-- limits -->
         <max_linear_acceleration>1</max_linear_acceleration>
         <min_linear_acceleration>-1</min_linear_acceleration>
         <max_angular_acceleration>2</max_angular_acceleration>
@@ -508,12 +514,17 @@
         <min_linear_velocity>-0.46</min_linear_velocity>
         <max_angular_velocity>1.9</max_angular_velocity>
         <min_angular_velocity>-1.9</min_angular_velocity>
+
+        <!-- input -->
         <topic>$(arg namespace)/cmd_vel</topic>
+
+        <!-- output -->
         <odom_topic>$(arg namespace)/odom</odom_topic>
         <tf_topic>$(arg namespace)/tf</tf_topic>
         <frame_id>odom</frame_id>
         <child_frame_id>base_footprint</child_frame_id>
         <odom_publish_frequency>30</odom_publish_frequency>
+
       </plugin>
 
       <plugin
