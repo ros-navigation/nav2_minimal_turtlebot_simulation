@@ -156,7 +156,7 @@
             </mesh>
           </geometry>
           <material>
-            <diffuse>1 1 1</diffuse>
+            <diffuse>0.5 0.5 0.5</diffuse>
           </material>
         </visual>
 
@@ -245,7 +245,7 @@
             </mesh>
           </geometry>
           <material>
-            <diffuse>1 1 1</diffuse>
+            <diffuse>0.5 0.5 0.5</diffuse>
           </material>
         </visual>
       </link>
@@ -305,7 +305,7 @@
             </mesh>
           </geometry>
           <material>
-            <diffuse>1 1 1</diffuse>
+            <diffuse>0.5 0.5 0.5</diffuse>
           </material>
         </visual>
       </link>
@@ -350,9 +350,7 @@
             </sphere>
           </geometry>
           <material>
-            <ambient>0 0 1 1</ambient>
-            <diffuse>0 0 1 1</diffuse>
-            <specular>0 0 1 1</specular>
+            <diffuse>0.5 0.5 0.5</diffuse>
           </material>
         </visual>
       </link>
@@ -397,9 +395,7 @@
             </sphere>
           </geometry>
           <material>
-            <ambient>0 0 1 1</ambient>
-            <diffuse>0 0 1 1</diffuse>
-            <specular>0 0 1 1</specular>
+            <diffuse>0.5 0.5 0.5</diffuse>
           </material>
         </visual>
       </link>
