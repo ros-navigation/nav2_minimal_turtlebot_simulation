@@ -30,7 +30,7 @@ from launch.actions import (
     RegisterEventHandler,
 )
 from launch.conditions import IfCondition
-from launch.event_handlers import OnShutdown
+from launch.event_handlers import OnProcessExit, OnShutdown
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command
 from launch.substitutions import LaunchConfiguration, PythonExpression
@@ -168,6 +168,10 @@ def generate_launch_description():
                          'gz_sim.launch.py')),
         launch_arguments={'gz_args': ['-r -s ', world_sdf]}.items(),
         condition=IfCondition(use_simulator))
+    # Gazebo must not start before xacro has finished writing the world file.
+    start_gazebo_server = RegisterEventHandler(event_handler=OnProcessExit(
+        target_action=world_sdf_xacro,
+        on_exit=[gazebo_server]))
 
     remove_temp_sdf_file = RegisterEventHandler(event_handler=OnShutdown(
         on_shutdown=[
@@ -222,7 +226,7 @@ def generate_launch_description():
     ld.add_action(world_sdf_xacro)
     ld.add_action(remove_temp_sdf_file)
     ld.add_action(gz_robot)
-    ld.add_action(gazebo_server)
+    ld.add_action(start_gazebo_server)
     ld.add_action(gazebo_client)
 
     # Add the actions to launch all of the navigation nodes
